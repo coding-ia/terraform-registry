@@ -1,0 +1,4 @@
+
+src/.vs/*
+src/TerraformRegistry/obj/*
+src/TerraformRegistry/bin/*
