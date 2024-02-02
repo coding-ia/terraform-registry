@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TerraformRegistry.Model.Request;
+using TerraformRegistry.Service;
 
 namespace TerraformRegistry.Controllers
 {
