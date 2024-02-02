@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using System.Text.Json;
 
 namespace TerraformRegistry.Controllers
 {
@@ -12,7 +12,7 @@ namespace TerraformRegistry.Controllers
         private readonly IServiceConfiguration _config = config;
 
         [HttpGet(".well-known/terraform.json")]
-        public HttpResponseMessage ServiceDiscovery()
+        public IActionResult ServiceDiscovery()
         {
             string discovery = "{\"providers.v1\": \"/terraform/providers/v1/\"}";
 
@@ -28,13 +28,12 @@ namespace TerraformRegistry.Controllers
             }
             else
             {
-                return new HttpResponseMessage(HttpStatusCode.NoContent);
+                return NoContent();
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(discovery),
-            };
+            JsonDocument doc = JsonDocument.Parse(discovery);
+
+            return Ok(doc);
         }
     }
 }

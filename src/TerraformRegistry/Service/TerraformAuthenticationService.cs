@@ -4,7 +4,7 @@ using Octokit;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace TerraformRegistry
+namespace TerraformRegistry.Service
 {
     internal class TerraformAuthenticationService(string clientId, string clientSecret)
     {
@@ -116,7 +116,7 @@ namespace TerraformRegistry
         {
             if (authHeader.Count != 1)
                 throw new Exception("No authorization header.");
-            
+
             string[] parts = authHeader[0].Split(' ');
 
             if (parts.Length != 2)

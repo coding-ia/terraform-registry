@@ -1,7 +1,11 @@
 {
   "profiles": {
     "TerraformRegistry": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "TERRAFORM_PROVIDER_BUCKET": "terraform-provider-registry-20230706214038361500000001",
+        "TERRAFORM_PROVIDER_BUCKET_REGION": "us-east-2"
+      }
     },
     "Docker": {
       "commandName": "Docker"

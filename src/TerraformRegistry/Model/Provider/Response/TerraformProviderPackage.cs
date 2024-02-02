@@ -1,6 +1,4 @@
-﻿using TerraformRegistry.Model.Provider;
-
-namespace TerraformRegistry.Model.Provider.Response
+﻿namespace TerraformRegistry.Model.Provider.Response
 {
     public class TerraformProviderPackage : TerraformProviderPlatform
     {

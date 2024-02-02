@@ -6,7 +6,7 @@ namespace TerraformRegistry.Controllers
 {
     [ApiController]
     [Route("/oauth")]
-    internal class TerraformAuthenticationController(IServiceConfiguration config) : ControllerBase
+    public class TerraformAuthenticationController(IServiceConfiguration config) : ControllerBase
     {
         private readonly IServiceConfiguration _config = config;
 

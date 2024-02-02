@@ -4,16 +4,16 @@ using System.Text.Json;
 using TerraformRegistry.Model.Provider;
 using TerraformRegistry.Model.Provider.Response;
 
-namespace TerraformRegistry
+namespace TerraformRegistry.Service
 {
-    public class TerraformProviderService(string bucketName, string region)
+    internal class TerraformProviderService(string bucketName, string region)
     {
         private readonly string _bucketName = bucketName;
         private readonly Amazon.RegionEndpoint _region = Amazon.RegionEndpoint.GetBySystemName(region);
 
-        public async Task<string> Versions(string name_space, string name)
+        internal async Task<string> Versions(string name_space, string name)
         {
-            string returnData = String.Empty;
+            string returnData = string.Empty;
             string data = await Content(_bucketName, $"providers/{name_space}/{name}.json");
 
             if (!string.IsNullOrEmpty(data))
@@ -54,7 +54,7 @@ namespace TerraformRegistry
             return returnData;
         }
 
-        public async Task<string> ProviderPackage(string name_space, string name, string version, string os, string arch)
+        internal async Task<string> ProviderPackage(string name_space, string name, string version, string os, string arch)
         {
             string responseData = string.Empty;
 

@@ -1,11 +1,12 @@
 {
-  "providers.v1": "/terraform/providers/v1/",
-  "login.v1": {
-    "client": "terraform-cli",
-    "grant_types": [
-      "authz_code"
-    ],
-    "authz": "/oauth/authorization",
-    "token": "/oauth/access_token"
-  }
+	"providers.v1": "/terraform/providers/v1/",
+	"modules.v1": "/terraform/modules/v1/",
+	"login.v1": {
+		"client": "terraform-cli",
+		"grant_types": [
+			"authz_code"
+		],
+		"authz": "/oauth/authorization",
+		"token": "/oauth/access_token"
+	}
 }
