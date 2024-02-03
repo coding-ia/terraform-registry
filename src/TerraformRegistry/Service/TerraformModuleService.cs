@@ -1,8 +1,6 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Octokit;
-using System.Text.Json;
-using TerraformRegistry.Model.Module;
 
 namespace TerraformRegistry.Service
 {
@@ -11,25 +9,24 @@ namespace TerraformRegistry.Service
         private readonly string _bucketName = bucketName;
         private readonly Amazon.RegionEndpoint _region = Amazon.RegionEndpoint.GetBySystemName(region);
 
-        internal async Task<string> ModuleSource(string name_space, string name, string system, string version)
+        internal async Task<string> ModuleVersion(string name_space, string name, string system)
         {
-            string data = await Content(_bucketName, $"modules/{name_space}/{system}.json");
-            if (string.IsNullOrEmpty(data)) return string.Empty;
+            var data = await Content(_bucketName, $"modules/{name_space}/{name}/{system}.json");
+            return data;
+        }
 
-            var tm = JsonSerializer.Deserialize<TerraformModule>(data);
-
-            if (tm == null) return string.Empty;
-            var moduleVersion = tm.Versions.Find(x => x.Version == version);
-
-            if (moduleVersion == null) return string.Empty;
-
+        internal string ModuleDownload(string name_space, string name, string system, string version)
+        {
             string repo = $"terraform-{system}-{name}";
-            string downloadUrl = await GetReleaseTagDownload(name_space, repo, moduleVersion.Version);
+            var downloadUrl = GetReleaseTagDownloadUrl(name_space, repo, version).GetAwaiter().GetResult();
+
+            if (!string.IsNullOrEmpty(downloadUrl))
+                downloadUrl = $"{downloadUrl}?archive=tar.gz";
 
             return downloadUrl;
         }
 
-        private async Task<string> GetReleaseTagDownload(string owner, string repo, string tagName, Uri? baseAddress = null)
+        private async Task<string> GetReleaseTagDownloadUrl(string owner, string repo, string version, Uri? baseAddress = null)
         {
             GitHubClient client;
 
@@ -42,9 +39,10 @@ namespace TerraformRegistry.Service
                 client = new GitHubClient(new ProductHeaderValue("terraform-registry"), baseAddress);
             }
 
-            var tags = await client.Repository.GetAllTags(owner, repo);
-            var tag = tags.First<RepositoryTag>(x => x.Name == tagName);
-            return tag.TarballUrl ?? "";
+            var releases = await client.Repository.Release.GetAll(owner, repo);
+            var release = releases.FirstOrDefault<Release>(x => x.TagName.Contains(version, StringComparison.OrdinalIgnoreCase));
+
+            return release?.TarballUrl ?? "";
         }
 
         private async Task<string> Content(string? bucketName, string key)

@@ -18,7 +18,7 @@ var app = builder.Build();
 
 if (string.IsNullOrEmpty(lambda_function))
 {
-    //app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
 }
 
 app.UseRouting();
